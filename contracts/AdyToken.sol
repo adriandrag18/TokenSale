@@ -6,7 +6,7 @@ contract AdyToken {
     string public name = "Ady Token";
     string public symbol = "ADY";
     uint8 public decimals = 18;
-    uint public totalSupply = 100000 * 10 ** 18;
+    uint public totalSupply = 1000000 * 10 ** 18;
     
 
     event Transfer(address indexed _from, address indexed _to, uint256 _value);
