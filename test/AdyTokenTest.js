@@ -18,12 +18,12 @@ contract('AdyToken', (accounts) => {
     })
 
     describe('Ady Token deploymet', async () => {
-        it('name & symbol &', async () => {
-            let name = await adyToken.name()
+        it('name & symbol & standard', async () => {
+            const name = await adyToken.name()
             assert(name, 'Ady Token', 'name')
-            let symbol = await adyToken.symbol()
+            const symbol = await adyToken.symbol()
             assert(symbol, 'ADY', 'symbol')
-            let standard = await adyToken.standard()
+            const standard = await adyToken.standard()
             assert(standard, 'Ady Token v0.1', 'standard')
         })
         it('to much inital supply', async () => {
@@ -55,9 +55,48 @@ contract('AdyToken', (accounts) => {
             assert.equal(receipt.logs[0].args._value, Number(tokens('100000')), 'value')
             
             let result = await adyToken.balanceOf(accounts[1])
-            assert.equal(result.toString(), tokens('100000'), 'reciver balance')
+            assert.equal(result.toString(), tokens('100000'), 'receiver balance')
             result = await adyToken.balanceOf(accounts[0])
             assert.equal(result.toString(), tokens('900000'), 'admin balance')
+        })
+
+        it('approves', async () => {
+            await adyToken.approve(accounts[0], tokens('900000000'),
+                {from: accounts[1]}).should.be.rejected
+
+            let result = await adyToken.approve.call(accounts[0], tokens('10000'),
+                {from: accounts[1]})
+            assert.equal(result, true, 'return value approve')
+
+            let receipt = await adyToken.approve(accounts[0], tokens('10000'),
+                {from: accounts[1]})
+            assert.equal(receipt.logs.length, 1, 'number of events')
+            assert.equal(receipt.logs[0].event, 'Approval', 'event type')
+            assert.equal(receipt.logs[0].args._spender, accounts[0], 'sender')
+            assert.equal(receipt.logs[0].args._owner, accounts[1], 'owner')
+            assert.equal(receipt.logs[0].args._value, Number(tokens('10000')), 'value')
+
+            result = await adyToken.allowance(accounts[1], accounts[0])
+            assert.equal(result.toString(), tokens('10000'), 'allowance')
+        })
+
+        it('transferFrom', async () => {
+            await adyToken.transferFrom(accounts[1], accounts[2], tokens('100000000'),
+                {from: accounts[0]}).should.be.rejected
+            await adyToken.transferFrom(accounts[1], accounts[2], tokens('10001'),
+                {from: accounts[0]}).should.be.rejected
+            
+            let result = await adyToken.transferFrom.call(accounts[1], accounts[2],
+                tokens('10000'), {from: accounts[0]})
+            assert.equal(result, true, 'return value')
+
+            let receipt = await adyToken.transferFrom(accounts[1], accounts[2],
+                tokens('10000'), {from: accounts[0]})
+            assert.equal(receipt.logs.length, 1, 'number of events')
+            assert.equal(receipt.logs[0].event, 'Transfer', 'event type')
+            assert.equal(receipt.logs[0].args._from, accounts[1], 'from')
+            assert.equal(receipt.logs[0].args._to, accounts[2], 'to')
+            assert.equal(receipt.logs[0].args._value, Number(tokens('10000')), 'value')
         })
     })
 })

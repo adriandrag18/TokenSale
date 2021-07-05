@@ -17,7 +17,7 @@ contract AdyToken {
     event Transfer(address indexed _from, address indexed _to, uint256 _value);
     event Approval(address indexed _owner, address indexed _spender, uint256 _value);
 
-    constructor(uint _initalSupply) public {
+    constructor (uint _initalSupply) public {
         require(_initalSupply <= maxSupply, "initial supply to big");
         totalSupply = _initalSupply;
         balances[msg.sender] = _initalSupply;
@@ -39,7 +39,7 @@ contract AdyToken {
     }
 
     function approve(address _spender, uint256 _value) public returns (bool success) {
-        require(balances[msg.sender] > _value, 'balance to low');
+        require(balances[msg.sender] >= _value, 'balance to low');
         emit Approval(msg.sender, _spender, _value);
 
         allowances[msg.sender][_spender] = _value;
@@ -51,12 +51,14 @@ contract AdyToken {
     }
 
     function transferFrom(address _from, address _to, uint256 _value) public returns (bool success) {
-        require(balances[_from] > _value, "balance to low");
-        require(allowances[_from][msg.sender] > _value, "allowance to low");
+        require(balances[_from] >= _value, "balance to low");
+        require(allowances[_from][msg.sender] >= _value, "allowance to low");
         emit Transfer(_from, _to, _value);
+        
         balances[_from] -= _value;
         balances[_to] += _value;
         allowances[_from][msg.sender] -= _value;
+        
         return true;
     }
 }
