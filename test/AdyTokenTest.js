@@ -17,7 +17,7 @@ contract('AdyToken', (accounts) => {
         adyToken = await AdyToken.new(web3.utils.toWei('1000000', 'Ether'))
     })
 
-    describe('Ady Token deploymet', async () => {
+    describe('AdyToken deploymet', async () => {
         it('name & symbol & standard', async () => {
             const name = await adyToken.name()
             assert(name, 'Ady Token', 'name')
