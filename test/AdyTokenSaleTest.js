@@ -17,6 +17,7 @@ contract('AdyTokenSale', (accounts) => {
     const totalSupply = 1000000
     const tokensAvailable = 500000 // 50% of totalSupply
     const admin = accounts[0] // the same for the token and tokenSale smart contract
+    const numberOfTokens = 10;
 
     before(async () => {
         tokenInstance = await AdyToken.new(tokens(totalSupply.toString()), {from: admin})
@@ -38,7 +39,6 @@ contract('AdyTokenSale', (accounts) => {
     })
 
     describe('Buy', async () => {
-        const numberOfTokens = 10;
         const buyer = accounts[1]
         it('token buying', async () => {
             let tokenRemaining = await tokenInstance.balanceOf(tokenSaleInsatnce.address)
@@ -81,6 +81,16 @@ contract('AdyTokenSale', (accounts) => {
 
             const amount = await tokenSaleInsatnce.tokenSold()
             assert.equal(amount, numberOfTokens, 'tokenSold')
+        })
+    })
+
+    describe('EndSale', async () => {
+        it('not admin try to end sale', async () => {
+            const tokenRemaining = await tokenInstance.balanceOf(tokenSaleInsatnce.address)
+            assert.equal(tokenRemaining, tokens((tokensAvailable - numberOfTokens).toString()), 'tokenRemaining')
+            for (let i = 1; i < accounts.length; i++)
+                await tokenSaleInsatnce.endSale({from: accounts[i]}).should.be.rejected
+            await tokenSaleInsatnce.endSale({from: admin})
         })
     })
 })
