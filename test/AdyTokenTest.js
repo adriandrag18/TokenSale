@@ -14,7 +14,7 @@ function tokens(n) {
 contract('AdyToken', (accounts) => {
     let adyToken
     before(async () => {
-        adyToken = await AdyToken.new(web3.utils.toWei('1000000', 'Ether'))
+        adyToken = await AdyToken.new(tokens('1000000'))
     })
 
     describe('AdyToken deploymet', async () => {

@@ -5,19 +5,33 @@ import "./AdyToken.sol";
 contract AdyTokenSale {
     
     address admin;
-    AdyToken public tokenContract;
     uint public tokenPrice;
+    uint public tokenSold;
+    uint oneToken;
+    AdyToken public tokenContract;
 
-    
+    event Sell(address _buyer, uint _amount);
 
     constructor (AdyToken _tokenContract, uint _tokenPrice) public {
         admin = msg.sender;
-        tokenContract = _tokenContract;
         tokenPrice = _tokenPrice;
+        tokenContract = _tokenContract;
+        oneToken = 10 ** uint(tokenContract.decimals());
     }
 
-    function buyTokens(uint _numberOfTokens) public payable {
-        
+    function buyTokens(uint _amount) public payable {
+        require(msg.value == mul(_amount, tokenPrice));
+        require(tokenContract.balanceOf(address(this)) >= _amount);
+        require(tokenContract.transfer(msg.sender, mul(_amount, oneToken)));
+
+        tokenSold += _amount;
+
+        emit Sell(msg.sender, _amount);
+    }
+
+    // dsmath
+    function mul(uint x, uint y) internal pure returns (uint z) {
+        require(y == 0 || (z = x * y) / y == x, "ds-math-mul-overflow");
     }
 }
 
