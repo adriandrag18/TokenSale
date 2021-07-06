@@ -4,7 +4,7 @@ import "./AdyToken.sol";
 
 contract AdyTokenSale {
     
-    address admin;
+    address payable admin;
     uint public tokenPrice;
     uint public tokenSold;
     uint oneToken;
@@ -27,6 +27,13 @@ contract AdyTokenSale {
         tokenSold += _amount;
 
         emit Sell(msg.sender, _amount);
+    }
+
+    function endSale() public {
+        require(msg.sender == admin);
+        require(tokenContract.transfer(admin, tokenContract.balanceOf(address(this))));
+        // destroy the contract 
+        selfdestruct(admin);
     }
 
     // dsmath

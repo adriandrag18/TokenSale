@@ -29,7 +29,7 @@ contract AdyToken {
     }
 
     function transfer(address _to, uint256 _value) public returns (bool success) {
-        require(balances[msg.sender] > _value, "balance to low");
+        require(balances[msg.sender] >= _value, "balance to low");
         emit Transfer(msg.sender, _to, _value);
 
         balances[msg.sender] -= _value;
