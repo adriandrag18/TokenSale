@@ -52,8 +52,8 @@ contract('AdyTokenSale', (accounts) => {
             assert.equal(receipt.logs[0].args._buyer, buyer, 'Buyer')
             assert.equal(receipt.logs[0].args._amount, numberOfTokens, 'Amout')
 
-            const amount = await tokenSaleInsatnce.tokenSold()
-            assert.equal(amount, numberOfTokens, 'tokenSold')
+            const amount = await tokenSaleInsatnce.tokensSold()
+            assert.equal(amount, numberOfTokens, 'tokensSold')
 
             tokenRemaining = await tokenInstance.balanceOf(tokenSaleInsatnce.address)
             assert.equal(tokenRemaining, tokens((tokensAvailable - numberOfTokens).toString()), 'tokenRemaining')
@@ -79,8 +79,8 @@ contract('AdyTokenSale', (accounts) => {
             const tokenRemaining = await tokenInstance.balanceOf(tokenSaleInsatnce.address)
             assert.equal(tokenRemaining, tokens((tokensAvailable - numberOfTokens).toString()), 'tokenRemaining')
 
-            const amount = await tokenSaleInsatnce.tokenSold()
-            assert.equal(amount, numberOfTokens, 'tokenSold')
+            const amount = await tokenSaleInsatnce.tokensSold()
+            assert.equal(amount, numberOfTokens, 'tokensSold')
         })
     })
 

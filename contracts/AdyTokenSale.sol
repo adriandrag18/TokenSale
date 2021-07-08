@@ -6,7 +6,7 @@ contract AdyTokenSale {
     
     address payable admin;
     uint public tokenPrice;
-    uint public tokenSold;
+    uint public tokensSold;
     uint oneToken;
     AdyToken public tokenContract;
 
@@ -24,7 +24,7 @@ contract AdyTokenSale {
         require(tokenContract.balanceOf(address(this)) >= _amount);
         require(tokenContract.transfer(msg.sender, mul(_amount, oneToken)));
 
-        tokenSold += _amount;
+        tokensSold += _amount;
 
         emit Sell(msg.sender, _amount);
     }
