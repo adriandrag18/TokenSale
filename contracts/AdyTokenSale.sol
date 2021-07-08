@@ -20,9 +20,9 @@ contract AdyTokenSale {
     }
 
     function buyTokens(uint _amount) public payable {
-        require(msg.value == mul(_amount, tokenPrice));
-        require(tokenContract.balanceOf(address(this)) >= _amount);
-        require(tokenContract.transfer(msg.sender, mul(_amount, oneToken)));
+        require(msg.value == mul(_amount, tokenPrice), 'incorrect value');
+        require(tokenContract.balanceOf(address(this)) >= _amount, 'insufficient tokens available');
+        require(tokenContract.transfer(msg.sender, mul(_amount, oneToken)), 'transfer failed');
 
         tokensSold += _amount;
 
@@ -30,8 +30,8 @@ contract AdyTokenSale {
     }
 
     function endSale() public {
-        require(msg.sender == admin);
-        require(tokenContract.transfer(admin, tokenContract.balanceOf(address(this))));
+        require(msg.sender == admin, 'not admin');
+        require(tokenContract.transfer(admin, tokenContract.balanceOf(address(this))), 'transfer failed');
         // destroy the contract 
         selfdestruct(admin);
     }
