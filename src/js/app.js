@@ -67,7 +67,6 @@ App = {
         $('#token-price').html(Number(web3.fromWei(App.tokenPrice, 'ether')))       
         
         App.tokensSold = await App.tokenSaleInstance.tokensSold()
-        App.tokensSold = 400000
         console.log('tokens sold:', App.tokensSold)
         $('#tokens-sold').html(Number(App.tokensSold))
 
