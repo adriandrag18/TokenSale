@@ -13,6 +13,7 @@ App = {
         console.log("App initializing")
         await App.initWeb3()
         await App.initContracts()
+        await App.listenForEvents()
         await App.render()
     },
 
@@ -43,7 +44,19 @@ App = {
                 console.log("Ady Token Address:", adyToken.address)
             })
         })
-      },
+    },
+
+    listenForEvents: async () => {
+        App.contracts.AdyTokenSale.deployed().then((instance) => {
+            instance.Sell({}, {
+                fromBlock: 0,
+                toBlock: 'latest',
+            }).watch((error, event) => {
+                console.log("Sell event triggered", event)
+                App.render()
+            })
+        })
+    },
 
     render: async () => {
         if (App.loading)
@@ -73,14 +86,29 @@ App = {
         let address = await App.tokenSaleInstance.address
         App.tokensAvailable = await App.tokenInstance.balanceOf(address)
         console.log('tokens available:', App.tokensAvailable)
-        $('#tokens-available').html(Number(web3.fromWei(App.tokensAvailable, 'ether')))
+        $('#tokens-available').html(Number(web3.fromWei(App.tokensAvailable, 'ether')) + Number(App.tokensSold))
 
         let progressPercent = Math.ceil(100 * Number(App.tokensSold) / Number(web3.fromWei(App.tokensAvailable, 'ether')))
         $('#progress').css('width', progressPercent + "%")
+        
+        let tokenBalance = await App.tokenInstance.balanceOf(App.account)
+        $('#token-balance').html(Number(web3.fromWei(tokenBalance, 'ether')))
 
         App.loading = false
         loader.hide()
         content.show()
+    },
+
+    buyTokens: async () => {
+        $('#content').hide()
+        $('#loader').show()
+        let numberOfTokens = $('#numberOfTokens').val()
+        let recipt = await App.tokenSaleInstance.buyTokens(numberOfTokens, {
+                from: App.account,
+                value: numberOfTokens * App.tokenPrice,
+                gas: 500000})
+        console.log('Token bought:', Number(recipt.logs[0].args._amount))
+       $('form').trigger('reset')
     }
 }
 
