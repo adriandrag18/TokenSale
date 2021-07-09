@@ -46,6 +46,12 @@ module.exports = {
      port: 7545,
      network_id: "*",
     },
+    rinkeby: {
+      host: "localhost",
+      port: 8545,
+      network_id: 4,
+      gas: 40000000,
+    }
     // Another network with more advanced options...
     // advanced: {
     // port: 8777,             // Custom port
