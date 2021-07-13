@@ -7,4 +7,6 @@ Bootstrap 3.3.7
 - sudo apt-get install ethereum
 - sudo npm install -g ethereumjs-testrpc
 - geth --rinkeby --rpc --rpcapi="personal,eth,network,web3,net" --ipcpath="~/Library/Ethereum/geth.ipc"
+- geth --rinkeby --rpc --rpcapi="personal,eth,net,web3,net,admin,debug,txpool,clique,miner" --ipcpath="~/Library/Ethereum/geth.ipc"
 - geth attach ~/Library/Ethereum/geth.ipc
+- geth --rinkeby account new
