@@ -1,4 +1,5 @@
 Bootstrap 3.3.7
+https://www.youtube.com/watch?v=XdKv5uwEk5A&list=PLS5SEs8ZftgUNcUVXtn2KXiE1Ui9B5UrY&index=17
 
 **Notes:**
 - `truffle init`
@@ -10,3 +11,4 @@ Bootstrap 3.3.7
 - geth --rinkeby --rpc --rpcapi="personal,eth,net,web3,net,admin,debug,txpool,clique,miner" --ipcpath="~/Library/Ethereum/geth.ipc"
 - geth attach ~/Library/Ethereum/geth.ipc
 - geth --rinkeby account new
+- 07:07:00 in tutorial
